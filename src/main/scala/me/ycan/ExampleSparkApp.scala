@@ -30,19 +30,18 @@ object ExampleSparkApp extends App{
     .filter(maybeRawData => maybeRawData.isSuccess)
     .map(data => data.get)
 
- val result = filteredRawData.map(r=>(r.a,1)).reduceByKey((key, n)=>(key+n)).collect()
+ val result1 = filteredRawData.map(r=>(r.a,1)).reduceByKey((value1, value2)=>(value1+value2)).collect()
   result.foreach(println)
   //.reduceByKey((acc, n) => (acc + n)).collect()
 
-/*
-  val result: RDD[GroupedMyMotherName] = filteredRawData.groupBy(_.a).map{ case (key, values) =>
+ val result1: RDD[GroupedMyMotherName] = filteredRawData.groupBy(_.a).map{ case (key, values) =>
     GroupedMyMotherName(key, values.size)
   }
 
   val collectedResult: Array[GroupedMyMotherName] = result.collect()
 
   collectedResult.foreach(println)
-  */
+
 
 
 
