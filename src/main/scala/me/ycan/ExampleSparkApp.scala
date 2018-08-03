@@ -17,26 +17,24 @@ object ExampleSparkApp extends App{
     .setAppName("test-app")
   val sparkContext: SparkContext = SparkContext.getOrCreate(conf)
 
-  val rawData: RDD[String] = sparkContext.textFile(path = "/Users/ycan/Desktop/test.txt")
+  val rawData: RDD[String] = sparkContext.textFile(path = "/home/ryskulova/Documents/SparkScala/kodluyoruzBigData/test-scala-project/test.txt")
 
   val readData: RDD[Try[RawData]] =rawData.map{ line =>
-    val fields = line.split(",")
+    val fields = line.split(" ")
     Try(
       RawData(fields(0), fields(1), fields(2))
     )
   }
 
-
-
   val filteredRawData: RDD[RawData] = readData
     .filter(maybeRawData => maybeRawData.isSuccess)
     .map(data => data.get)
 
-//  filteredRawData.map(r => (r.a, r)).reduceByKey{ t =>
-//
-//  }
+ val result = filteredRawData.map(r=>(r.a,1)).reduceByKey((key, n)=>(key+n)).collect()
+  result.foreach(println)
+  //.reduceByKey((acc, n) => (acc + n)).collect()
 
-
+/*
   val result: RDD[GroupedMyMotherName] = filteredRawData.groupBy(_.a).map{ case (key, values) =>
     GroupedMyMotherName(key, values.size)
   }
@@ -44,6 +42,7 @@ object ExampleSparkApp extends App{
   val collectedResult: Array[GroupedMyMotherName] = result.collect()
 
   collectedResult.foreach(println)
+  */
 
 
 
